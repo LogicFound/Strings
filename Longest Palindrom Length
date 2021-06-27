@@ -1,0 +1,42 @@
+import java.util.HashSet;
+import java.util.Set;
+
+public class LongestPalindrome {
+    public int longestPalindrome(String s) {
+        // Using Set
+        Set<Character> seenSet = new HashSet<>();
+        int count  = 0;
+        char[] array = s.toCharArray();
+        for(int i=0; i<array.length; i++) {
+            if(!seenSet.add(array[i])) {
+                count++;
+                seenSet.remove(array[i]);
+            }
+        }
+
+        int result = count*2;
+
+        return seenSet.size() ==0 ? result : result+1;
+    }
+
+    public int solution(String s) {
+        int[] characterCount = new int[256];
+        int count  = 0;
+        char[] array = s.toCharArray();
+
+        for(int i=0; i< array.length; i++) {
+            characterCount[array[i]] +=1;
+            if(characterCount[array[i]] %2 == 0) {
+                count +=2;
+            }
+        }
+
+        return count == s.length() ? count : count+1;
+
+    }
+
+    public static void main(String[] args) {
+        LongestPalindrome obj = new LongestPalindrome();
+        System.out.println(obj.solution("aaa"));
+    }
+}
