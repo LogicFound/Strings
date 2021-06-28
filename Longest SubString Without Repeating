@@ -1,0 +1,29 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class LongestSubStringWithoutRepeating {
+    public int longestUniqueCharacterSubstring(String s) {
+
+        if(s.isEmpty()) {
+            return 0;
+        }
+        int maxCount = Integer.MIN_VALUE;
+        int windowStart = 0;
+        Map<Character, Integer> characterIndexMap = new HashMap<>();
+        for(int windowEnd = 0; windowEnd<s.length(); windowEnd++) {
+            Character ch = s.charAt(windowEnd);
+            if(characterIndexMap.containsKey(ch)) {
+                windowStart = Math.max(windowStart, characterIndexMap.get(ch)+1);
+            }
+            characterIndexMap.put(ch, windowEnd);
+            maxCount = Math.max(maxCount, windowEnd-windowStart+1);
+        }
+
+        return maxCount;
+    }
+
+    public static void main(String[] args) {
+        LongestSubStringWithoutRepeating obj = new LongestSubStringWithoutRepeating();
+        System.out.println(obj.longestUniqueCharacterSubstring("ABC"));
+    }
+}
