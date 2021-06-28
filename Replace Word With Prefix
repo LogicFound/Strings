@@ -1,0 +1,84 @@
+import java.util.*;
+
+public class ReplaceWordWithPrefix {
+
+    public String replaceWordsWithPrefix(String[] prefixes, String sentence) {
+        Trie trie = new Trie('#');
+        for(String prefix : prefixes) {
+            addToTrie(trie, prefix);
+        }
+        StringBuilder res = new StringBuilder();
+        String[] strings = sentence.split(" ");
+        for(String string : strings) {
+            String prefix = getPrefix(string, trie);
+            if(!prefix.isEmpty()) {
+                res.append(prefix);
+            } else {
+                res.append(string);
+            }
+            res.append(" ");
+        }
+
+        return res.substring(0, res.length()-2);
+    }
+
+
+    private String getPrefix(String word, Trie root) {
+        Trie node = root;
+        char[] array = word.toCharArray();
+        for (char ch : array) {
+            if (!node.neighborMap.containsKey(ch)) {
+                return "";
+            } else {
+                node = node.neighborMap.get(ch);
+                if (!node.word.isEmpty()) {
+                    return node.word;
+                }
+            }
+        }
+
+        return "";
+    }
+
+    private void addToTrie(Trie trie, String word) {
+        char[] array = word.toCharArray();
+        Trie node = trie;
+        for(Character ch : array) {
+
+            if(!node.neighborMap.containsKey(ch)) {
+                Trie newTrie = new Trie(ch);
+                node.neighborMap.put(ch, newTrie);
+            }
+
+           node = node.neighborMap.get(ch);
+        }
+        node.word = word;
+    }
+
+
+    public static void main(String[] args) {
+        String[] prefixes = {"cat", "catch", "alabama"};
+        String sentence = "The cats were catching yarn";
+
+        ReplaceWordWithPrefix obj = new ReplaceWordWithPrefix();
+        System.out.println(obj.replaceWordsWithPrefix(prefixes, sentence));
+
+        //Output: "The cat were cat yarn"
+    }
+
+}
+
+
+
+class Trie {
+    char ch ;
+    String word = "";
+    Map<Character, Trie> neighborMap;
+
+    public Trie(Character ch) {
+        this.ch = ch;
+        neighborMap = new HashMap<>();
+    }
+}
+
+
